@@ -145,14 +145,10 @@
 
         #Prepairing reboot
         
-        $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ep bypass -file $script"
+        $script = "-command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/Windows-Server-Automator.ps1'))"
+        $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument $script
         $principal = New-ScheduledTaskPrincipal -UserId $env:username -LogonType ServiceAccount -RunLevel Highest
         $trigger = New-ScheduledTaskTrigger -AtLogOn 
-        $script = "C:\Program Files\WindowsPowerShell\Modules\Windows-Server-Automator\Windows-Server-Automator.ps1"
-            New-Item -ItemType Directory ($script | Split-path) -ErrorAction SilentlyContinue | Out-Null
-            if(!(test-path $script)){
-            [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
-            Invoke-WebRequest -uri "https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/Windows-Server-Automator.ps1" -OutFile $script -UseBasicParsing}
         Register-ScheduledTask -TaskName "Windows-Server-Automator" -Principal $principal -Action $action -Trigger $trigger -Force | Out-Null 
 
         Write-Host "`t`tComputer is renamed, rebooting in 5 seconds.." -f yellow; Start-Sleep -s 5;
