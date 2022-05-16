@@ -9,9 +9,29 @@
             Set-ItemProperty -Path "HKLM:\Software\Microsoft\ServerManager" -Name "DoNotOpenServerManagerAtLogon" -Value 1    
         
         Write-host "`t`t- Disable Microsoft Logging Tasks in scheduled tasks." -f Yellow
-            Get-ScheduledTask -taskpath "\Microsoft\Windows\Application Experience\*" | Stop-ScheduledTask | Out-Null
-            Get-ScheduledTask -taskpath "\Microsoft\Windows\Application Experience\*" | Disable-ScheduledTask | Out-Null
-            
+            Start-Job -Name "Disabe scheduled tasks" -ScriptBlock {
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Application Experience\" -TaskName "Microsoft Compatibility Appraiser" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Application Experience\" -TaskName "ProgramDataUpdater" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Application Experience\" -TaskName "StartupAppTask" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\ApplicationData\" -TaskName "DsSvcCleanup" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Autochk\" -Taskname "Proxy" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Clip\" -TaskName "License Validation" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\CloudExperienceHost\" -TaskName "CreateObjectTask" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Customer Experience Improvement Program\" -TaskName "Consolidator" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Customer Experience Improvement Program\" -TaskName "UsbCeip" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Diagnosis\" -TaskName "Scheduled" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\DiskDiagnostic\" -TaskName "Microsoft-Windows-DiskDiagnosticDataCollector" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\DiskFootprint\" -TaskName "Diagnostics" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\License Manager\" -TaskName "TempSignedLicenseExchange" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Maintenance\" -TaskName "WinSAT" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\NetTrace\" -TaskName "GatherNetworkInfo" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\PI\" -TaskName "Sqm-Tasks" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Power Efficiency Diagnostics\" -TaskName "AnalyzeSystem" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\PushToInstall\" -TaskName "LoginCheck" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\PushToInstall\" -TaskName "Registration" | Out-Null
+                Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Windows Error Reporting\" -TaskName "QueueReporting" | Out-Null
+            } | Out-Null | Wait-Job        
+        
         Write-host "`t`t- Disable IE Security." -f Yellow
             $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
             $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
@@ -109,7 +129,7 @@
             Write-Host "`t`t`t - Setting new DNS..." -f Yellow; Start-Sleep -s 1
             Set-DnsClientServerAddress -InterfaceAlias $ethernetadaptername -ServerAddresses $newDNS | out-null
             Write-Host "`t`t`tIP SETTING COMPLETE!" -f yellow; Start-Sleep -S 1}
-            
+
         N  {    Write-Host "`t`tNo, this step will be skipped." -f red; Start-Sleep -s 2;   }
 
 } }While ($answer -notin "y", "n")
