@@ -53,8 +53,6 @@
                     Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Windows Error Reporting\" -TaskName "QueueReporting"
             } | Out-Null | Wait-Job
             Start-Sleep -s 1;
-    
-
 
 # PART 2 - Computername
     Write-host "PART 2- PC NAME" -f Green
@@ -137,27 +135,26 @@
     }While ($answer -notin "y", "n")
 
 
-<#
-if ($reboot -eq $true){    
+# Part 4 - Post script
+    
+    Set-ItemProperty -Path "HKLM:\Software\WinSerAuto\" -Name "WinSerAuto_HostConfigurator"  -Type DWord -Value 1 | Out-Null
+    
 
-#Prepairing reboot
-    Download next script
-    start-Start-Sleep -s 3 #Waiting for new DNS to respond
-    [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
-    $jobpath = 'C:\ProgramData\dc-setup.ps1'
-    Invoke-WebRequest -uri "###" -OutFile $jobpath -UseBasicParsing
-    Setting to start after reboot
-    $name = 'dc-setup'
-    #$action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ep bypass -file $jobpath"
-    $principal = New-ScheduledTaskPrincipal -UserId $env:username -LogonType ServiceAccount -RunLevel Highest
-    $trigger = New-ScheduledTaskTrigger -AtLogOn
-    Register-ScheduledTask -TaskName $Name  -Principal $principal -Action $action -Trigger $trigger -Force | Out-Null 
-    Write-Host "`t`tComputer is renamed, rebooting in 5 seconds.." -f yellow; Start-Sleep -s 5;
-    Restart-Computer -Force }
-    New-ScheduledTaskTrigger -AtLogOn
-    Register-ScheduledTask -TaskName $Name  -Principal $principal -Action $action -Trigger $trigger -Force | Out-Null 
-    Write-Host "`t`tComputer is renamed, rebooting in 5 seconds.." -f yellow; Start-Sleep -s 5;
-    Restart-Computer -Force 
 
-}
+    if ($reboot -eq $true){    
+
+        #Prepairing reboot
+        
+        $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "-ep bypass -file $script"
+        $principal = New-ScheduledTaskPrincipal -UserId $env:username -LogonType ServiceAccount -RunLevel Highest
+        $trigger = New-ScheduledTaskTrigger -AtLogOn 
+        $script = "C:\Program Files\WindowsPowerShell\Modules\Windows-Server-Automator\Windows-Server-Automator.ps1"
+            New-Item -ItemType Directory ($script | Split-path) -ErrorAction SilentlyContinue | Out-Null
+            if(!(test-path $script)){
+            [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
+            Invoke-WebRequest -uri "https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/Windows-Server-Automator.ps1" -OutFile $script -UseBasicParsing}
+        Register-ScheduledTask -TaskName "Windows-Server-Automator" -Principal $principal -Action $action -Trigger $trigger -Force | Out-Null 
+
+        Write-Host "`t`tComputer is renamed, rebooting in 5 seconds.." -f yellow; Start-Sleep -s 5;
+        Restart-Computer -Force }
 #>

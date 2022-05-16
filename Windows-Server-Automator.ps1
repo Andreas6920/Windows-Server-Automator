@@ -47,7 +47,7 @@ Write-host $logo -f Green
 "";
 Write-host "`t`t1) Host Configurator`t`t( Server Optimizer / Hostname / IP )" -f $menu1
 Write-host "`t`t2) Baserole Configurator`t( Server Role / Domain Name )" -f $menu2
-Write-host "`t`t3) AD Configurator`t`t`t( OU creation / User Creation / CSV import )" -f $menu3
+Write-host "`t`t3) AD Configurator`t`t( OU creation / User Creation / CSV import )" -f $menu3
 Write-host "`t`t4) Share Configurator`t`t( Security Group Creator / NTFS / SMB )" -f $menu4
 Write-host "`t`t0) Exit" -f Green
 "";"";
