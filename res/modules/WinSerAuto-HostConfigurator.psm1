@@ -95,7 +95,7 @@
 
         Y {
         
-            Do {Write-Host "`t`t`tPlease enter the NAME of the primary network interface card" -nonewline;
+            Do {Write-Host "`tPlease enter the NAME of the primary network interface card" -nonewline;
                 $ethernetadaptername = Read-Host " " } 
 
             While ($ethernetadaptername -notin ((Get-NetIPAddress -AddressFamily IPv4).InterfaceAlias)) 
