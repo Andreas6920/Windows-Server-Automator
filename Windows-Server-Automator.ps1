@@ -58,11 +58,11 @@ do {
     $selection = Read-Host
     Switch ($selection) {
 
-        1 {    Import-Module "$path_install\WinSerAuto_HostConfigurator"    }
-        2 {    Import-Module "$path_install\WinSerAuto_RoleConfigurator"    }
-        3 {    Import-Module "$path_install\WinSerAuto_ADConfigurator"      }
-        4 {    Import-Module "$path_install\WinSerAuto_ShareConfigurator"   }
-        0 {                                         EXIT                                                        }
+        1 {    Import-Module "$path_install\WinSerAuto-HostConfigurator"    }
+        2 {    Import-Module "$path_install\WinSerAuto-RoleConfigurator"    }
+        3 {    Import-Module "$path_install\WinSerAuto-ADConfigurator"      }
+        4 {    Import-Module "$path_install\WinSerAuto-ShareConfigurator"   }
+        0 {                                                                 }
    
     }}
 while ($selection -ne 0 )

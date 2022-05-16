@@ -3,10 +3,31 @@
         Write-host "PART 1 - Optimize Windows" -f Green
         
         Write-host "`t`t- Installing basic features in the background" -f Yellow
-            Start-Job -Name "Install Features" -ScriptBlock {Install-WindowsFeature "BitLocker","Direct-Play","Wireless-Networking","qWave"}
+            Start-Job -Name "Install Features" -ScriptBlock {Install-WindowsFeature "BitLocker","Direct-Play","Wireless-Networking","qWave"} | Out-Null
+            Start-Sleep -s 1;
+
+        Write-host "`t`t- Disable IE Security." -f Yellow
+            $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
+            $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
+            Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 0
+            Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 0
+            Stop-Process -Name Explorer
+            Start-Sleep -s 1;
 
         Write-host "`t`t- Disable Server Manager to pop-up when booting." -f Yellow
-            Set-ItemProperty -Path "HKLM:\Software\Microsoft\ServerManager" -Name "DoNotOpenServerManagerAtLogon" -Value 1    
+            If (!(Test-Path "HKLM:\Software\Microsoft\ServerManager")) {New-Item -Path "HKLM:\Software\Microsoft\ServerManager" -Force | Out-Null}
+            Set-ItemProperty -Path "HKLM:\Software\Microsoft\ServerManager" -Name "DoNotOpenServerManagerAtLogon" -Type DWord -Value 1
+            Start-Sleep -s 1;
+
+        Write-host "`t`t- Disable 'Ctrl+Alt+Del to login' requirement" -f Yellow
+            If (!(Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System")) {New-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Force | Out-Null}
+            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "DisableCAD" -Type DWord -Value 1
+            Start-Sleep -s 1;
+
+        Write-host "`t`t- Disable shutdown reason requirement" -f Yellow
+            If (!(Test-Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Reliability")) {New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Reliability" -Force | Out-Null}
+            Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Reliability" -Name "ShutdownReasonOn" -Type DWord -Value 0
+            Start-Sleep -s 1;
         
         Write-host "`t`t- Disable Microsoft Logging Tasks in scheduled tasks." -f Yellow
             Start-Job -Name "Disabe scheduled tasks" -ScriptBlock {
@@ -30,20 +51,9 @@
                 Disable-ScheduledTask -TaskPath "\Microsoft\Windows\PushToInstall\" -TaskName "LoginCheck" | Out-Null
                 Disable-ScheduledTask -TaskPath "\Microsoft\Windows\PushToInstall\" -TaskName "Registration" | Out-Null
                 Disable-ScheduledTask -TaskPath "\Microsoft\Windows\Windows Error Reporting\" -TaskName "QueueReporting" | Out-Null
-            } | Out-Null | Wait-Job        
+            } | Out-Null | Wait-Job
+            Start-Sleep -s 1;
         
-        Write-host "`t`t- Disable IE Security." -f Yellow
-            $AdminKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A7-37EF-4b3f-8CFC-4F3A74704073}"
-            $UserKey = "HKLM:\SOFTWARE\Microsoft\Active Setup\Installed Components\{A509B1A8-37EF-4b3f-8CFC-4F3A74704073}"
-            Set-ItemProperty -Path $AdminKey -Name "IsInstalled" -Value 0
-            Set-ItemProperty -Path $UserKey -Name "IsInstalled" -Value 0
-            Stop-Process -Name Explorer
-
-        Write-host "`t`t- Disable 'Ctrl+Alt+Del to login' requirement" -f Yellow
-            Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "DisableCAD" -Value 1
-
-        Write-host "`t`t- Disable shutdown reason requirement" -f Yellow
-            Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\Reliability" -Name "ShutdownReasonOn" -Value 0
 
 
     # PART 2 - Computername
