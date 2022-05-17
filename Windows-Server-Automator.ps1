@@ -47,10 +47,8 @@ if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto-ADConfigurator")."Win
 if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto-ShareConfigurator")."WinSerAuto-ShareConfigurator" -ne 0){$menu4 = "DarkGray"} else {$menu4 = "Green"}
 
 # Option list
-# Clear-Host
-"";
-Write-host $logo -f Green
-"";
+Clear-Host
+"";Write-host $logo -f Green;"";
 Write-host "`t`t1) Host Configurator`t`t( Server Optimizer / Hostname / IP )" -f $menu1
 Write-host "`t`t2) Baserole Configurator`t( Server Role / Domain Name )" -f $menu2
 Write-host "`t`t3) AD Configurator`t`t( OU creation / User Creation / CSV import )" -f $menu3
