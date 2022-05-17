@@ -153,7 +153,7 @@
         Write-Host "`t`tComputer is renamed, rebooting in 5 seconds.." -f yellow; Start-Sleep -s 5;
         Restart-Computer -Force }
 
-    # If not reboot - execute main script
+    # If not reboot - back to main menu
     if ($reboot -eq $false){
         # Main menu
         Write-Host "`t`tModule Complete. Going back to main menu." -f yellow; Start-Sleep -S 2
