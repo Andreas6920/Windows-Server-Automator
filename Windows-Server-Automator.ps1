@@ -1,20 +1,15 @@
 ﻿# Prepare
 
 $path_install = "C:\Program Files\WindowsPowerShell\Modules\Windows-Server-Automator"
+    New-Item -ItemType Directory $path_install -ErrorAction SilentlyContinue | Out-Null
 $modules = "WinSerAuto-HostConfigurator","WinSerAuto-RoleConfigurator","WinSerAuto-ADConfigurator","WinSerAuto-ShareConfigurator"
+    $modules | % {iwr -useb "https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/res/modules/$_.psm1" -OutFile $path_install\$_.psm1}
+    iwr -useb "https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/Windows-Server-Automator.ps1" -OutFile $path_install\Windows-Server-Automator.ps1
 $reg_install = "HKLM:\Software\WinSerAuto"
-
+    If (!(Test-Path $reg_install)) {New-Item -Path $reg_install -Force | Out-Null; $modules | % {Set-ItemProperty -Path $reg_install -Name $_ -Type DWord -Value 0}}
 
 Get-ScheduledTask -TaskName "Windows-Server-Automator" -ErrorAction SilentlyContinue | Stop-ScheduledTask | out-null
 Get-ScheduledTask -TaskName "Windows-Server-Automator" -ErrorAction SilentlyContinue | Disable-ScheduledTask | out-null
-
-$path_install = "C:\Program Files\WindowsPowerShell\Modules\Windows-Server-Automator"
-New-Item -ItemType Directory $path_install -ErrorAction SilentlyContinue | Out-Null
-$modules = "WinSerAuto-HostConfigurator","WinSerAuto-RoleConfigurator","WinSerAuto-ADConfigurator","WinSerAuto-ShareConfigurator"
-$modules | % {iwr -useb "https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/res/modules/$_.psm1" -OutFile $path_install\$_.psm1}
-iwr -useb "https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/Windows-Server-Automator.ps1" -OutFile $path_install\Windows-Server-Automator.ps1
-$reg_install = "HKLM:\Software\WinSerAuto"
-If (!(Test-Path $reg_install)) {New-Item -Path $reg_install -Force | Out-Null; $modules | % {Set-ItemProperty -Path $reg_install -Name $_ -Type DWord -Value 0}}
 
 # Menu
 $logo = 
