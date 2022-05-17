@@ -143,8 +143,6 @@
 
     if ($reboot -eq $true){    
 
-        #Prepairing reboot
-        
         $script = "-Windowstyle Maximized -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/Windows-Server-Automator.ps1'))"
         $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument $script
         $principal = New-ScheduledTaskPrincipal -UserId $env:username -LogonType ServiceAccount -RunLevel Highest
@@ -153,3 +151,8 @@
 
         Write-Host "`t`tComputer is renamed, rebooting in 5 seconds.." -f yellow; Start-Sleep -s 5;
         Restart-Computer -Force }
+
+    if ($reboot -eq $false){
+
+        Write-Host "`t`tModule Complete. Going back to main menu." -f yellow; Start-Sleep -S 2
+        CLS; iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/Windows-Server-Automator.ps1'))  }
