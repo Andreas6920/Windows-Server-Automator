@@ -137,7 +137,7 @@
 
 # Part 4 - Post script
     
-    Set-ItemProperty -Path "HKLM:\Software\WinSerAuto\" -Name "WinSerAuto_HostConfigurator"  -Type DWord -Value 1 | Out-Null
+    Set-ItemProperty -Path "HKLM:\Software\WinSerAuto\" -Name "WinSerAuto-HostConfigurator"  -Type DWord -Value 1 | Out-Null
     
 
 
