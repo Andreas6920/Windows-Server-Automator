@@ -12,18 +12,19 @@ Do {
 # Domain name validator
             DO{
                 "";
-                $domainname = (Read-Host -Prompt "`t`t`t`tPlease choose a domain name")
+                $domainname = (Read-Host -Prompt "`t`t`t`tPlease enter a domain name")
                 $valid = "no"
                 if($domainname -match '[^a-zA-Z0-9.-]'){write-host "`t`t`t`t" -nonewline; write-host "ERROR:`tInvalid character is used" -BackgroundColor Red -f White}
-                elseif($domainname -notmatch '^\w'){write-host "`t`t`t`t" -nonewline; Write-host "ERROR:`tstarts with dot (.)" -BackgroundColor Red -f White}
-                elseif($domainname -notmatch '\w\.\w'){write-host "`t`t`t`t" -nonewline; Write-host "ERROR:`tdoes not contain dot (.) as domain seperator" -BackgroundColor Red -f White}
+                elseif($domainname -match '^\.'){write-host "`t`t`t`t" -nonewline; Write-host "ERROR:`tstarts with dot (.)" -BackgroundColor Red -f White}
+                elseif($domainname -match '^\-'){write-host "`t`t`t`t" -nonewline; Write-host "ERROR:`tstarts with hyphen (-)" -BackgroundColor Red -f White}
+                elseif($domainname -notmatch '\.'){write-host "`t`t`t`t" -nonewline; Write-host "ERROR:`tdoes not contain dot (.) as domain seperator" -BackgroundColor Red -f White}
                 else{$valid = "yes"}
             }while($valid -eq "no")
 
 # Password valicator
             DO{
                             
-                $password = (Read-Host -Prompt "`t`t`t`tPlease choose a password")
+                $password = (Read-Host -Prompt "`t`t`t`tPlease enter a admin password")
                 $valid = "no"
                 if($password.Length -le 7){write-host "`t`t`t`t" -nonewline; write-host "ERROR:`tPassword too short" -BackgroundColor Red -f White}
                 elseif($password -cmatch '^[a-z]*$'){write-host "`t`t`t`t" -nonewline; write-host "ERROR:`tPassword only contains lower-case letters" -BackgroundColor Red -f White}
@@ -70,3 +71,7 @@ if ($reboot -eq $true){
 
     Write-Host "`t`tComputer is renamed, rebooting in 5 seconds.." -f yellow; Start-Sleep -s 5;
     Restart-Computer -Force }
+
+
+
+    

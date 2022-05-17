@@ -143,11 +143,18 @@
 
     if ($reboot -eq $true){    
 
-        $script = "-Windowstyle Maximized -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/Windows-Server-Automator.ps1'))"
-        $action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument $script
-        $principal = New-ScheduledTaskPrincipal -UserId $env:username -LogonType ServiceAccount -RunLevel Highest
-        $trigger = New-ScheduledTaskTrigger -AtLogOn 
-        Register-ScheduledTask -TaskName "Windows-Server-Automator" -Principal $principal -Action $action -Trigger $trigger -Force | Out-Null 
+        #script = "-Windowstyle Maximized -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/Windows-Server-Automator.ps1'))"
+        #$action = New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument $script
+        #$principal = New-ScheduledTaskPrincipal -UserId $env:username -LogonType ServiceAccount -RunLevel Highest
+        #$trigger = New-ScheduledTaskTrigger -AtLogOn 
+        #Register-ScheduledTask -TaskName "Windows-Server-Automator" -Principal $principal -Action $action -Trigger $trigger -Force | Out-Null 
+        
+        $taskAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-w Maximized -ep Bypass -File "C:\Program Files\WindowsPowerShell\Modules\Windows-Server-Automator\Windows-Server-Automator.ps1"'
+        $taskTrigger = New-ScheduledTaskTrigger -AtLogOn
+        $taskName = "Windows-Server-Automator"
+
+    Register-ScheduledTask -TaskName $taskName -Action $taskAction -Trigger $taskTrigger
+
 
         Write-Host "`t`tComputer is renamed, rebooting in 5 seconds.." -f yellow; Start-Sleep -s 5;
         Restart-Computer -Force }
