@@ -47,7 +47,7 @@ if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto-ADConfigurator")."Win
 if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto-ShareConfigurator")."WinSerAuto-ShareConfigurator" -ne 0){$menu4 = "DarkGray"} else {$menu4 = "Green"}
 
 # Option list
-Clear-Host
+# Clear-Host
 "";
 Write-host $logo -f Green
 "";
