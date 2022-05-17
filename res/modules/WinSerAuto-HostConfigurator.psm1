@@ -130,7 +130,7 @@
             Set-DnsClientServerAddress -InterfaceAlias $ethernetadaptername -ServerAddresses $newDNS | out-null
             Write-Host "`t`t`tIP SETTING COMPLETE!" -f yellow; Start-Sleep -S 1}
 
-        N  {    Write-Host "`t`tNo, this step will be skipped." -f red; Start-Sleep -s 2;    }
+        N  {    Write-Host "`tNO - IP setting will remain." -f Yellow ; Start-Sleep -s 2;    }
                 } 
     }While ($answer -notin "y", "n")
 

@@ -54,7 +54,7 @@ Do {
                 $WarningPreference = "Continue"
                 $reboot = $true
             }              
-            N {Write-Host "`t`t`tNO - This step will be skipped." -f red; $reboot = $false} 
+            N {Write-Host "`tNO - AD will not be installed on this system." -f Yellow ; $reboot = $false} 
 
         }   
 } While ($answer -notin "y","n")
