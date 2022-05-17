@@ -1,13 +1,21 @@
 ﻿# Prepare
+
 $path_install = "C:\Program Files\WindowsPowerShell\Modules\Windows-Server-Automator"
-    New-Item -ItemType Directory $path_install -ErrorAction SilentlyContinue | Out-Null
-
 $modules = "WinSerAuto-HostConfigurator","WinSerAuto-RoleConfigurator","WinSerAuto-ADConfigurator","WinSerAuto-ShareConfigurator"
-    $modules | % {iwr -useb "https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/res/modules/$_.psm1" -OutFile $path_install\$_.psm1; Start-Sleep -s 1}
-
 $reg_install = "HKLM:\Software\WinSerAuto"
-    If (!(Test-Path $reg_install)) {New-Item -Path $reg_install -Force | Out-Null; $modules | % {Set-ItemProperty -Path $reg_install -Name $_ -Type DWord -Value 0 | Out-Null}}
 
+Get-ScheduledTask -TaskName "Windows-Server-Automator" | Stop-ScheduledTask | out-null
+Get-ScheduledTask -TaskName "Windows-Server-Automator" | Disable-ScheduledTask | out-null
+
+    Start-Job -Name "Preparing in background" -ScriptBlock {
+        $path_install = "C:\Program Files\WindowsPowerShell\Modules\Windows-Server-Automator"
+            New-Item -ItemType Directory $path_install -ErrorAction SilentlyContinue | Out-Null
+        $modules = "WinSerAuto-HostConfigurator","WinSerAuto-RoleConfigurator","WinSerAuto-ADConfigurator","WinSerAuto-ShareConfigurator"
+            $modules | % {iwr -useb "https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/res/modules/$_.psm1" -OutFile $path_install\$_.psm1}
+            iwr -useb "https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/Windows-Server-Automator.ps1" -OutFile $path_install\Windows-Server-Automator.ps1
+        $reg_install = "HKLM:\Software\WinSerAuto"
+        If (!(Test-Path $reg_install)) {New-Item -Path $reg_install -Force | Out-Null; $modules | % {Set-ItemProperty -Path $reg_install -Name $_ -Type DWord -Value 0}}
+    }
 
 # Menu
 Clear-Host
@@ -28,13 +36,13 @@ $logo =
                 ██║  ██║╚██████╔╝   ██║   ╚██████╔╝██║ ╚═╝ ██║██║  ██║   ██║   ╚██████╔╝██║  ██║               
                 ╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝               
                                                                      
-Version 0.2
+Version 0.3
 Creator: Andreas6920 | https://github.com/Andreas6920/
 
 
 "                                                                   
 
-# Change color if module already executed
+# Change menu color if module already executed
 if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto_HostConfigurator").WinSerAuto_HostConfigurator -eq 0){$menu1 = "Green"} else {$menu1 = "DarkGray"}
 if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto_RoleConfigurator").WinSerAuto_RoleConfigurator -eq 0){$menu2 = "Green"} else {$menu2 = "DarkGray"}
 if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto_ADConfigurator").WinSerAuto_ADConfigurator -eq 0){$menu3 = "Green"} else {$menu3 = "DarkGray"}
@@ -58,11 +66,11 @@ do {
     $selection = Read-Host
     Switch ($selection) {
 
-        1 {    Import-Module "$path_install\WinSerAuto-HostConfigurator"    }
-        2 {    Import-Module "$path_install\WinSerAuto-RoleConfigurator"    }
-        3 {    Import-Module "$path_install\WinSerAuto-ADConfigurator"      }
-        4 {    Import-Module "$path_install\WinSerAuto-ShareConfigurator"   }
-        0 {                                                                 }
+        1 {    CLS;Import-Module "$path_install\WinSerAuto-HostConfigurator"    }
+        2 {    CLS;Import-Module "$path_install\WinSerAuto-RoleConfigurator"    }
+        3 {    CLS;Import-Module "$path_install\WinSerAuto-ADConfigurator"      }
+        4 {    CLS;Import-Module "$path_install\WinSerAuto-ShareConfigurator"   }
+        0 {                                                                     }
    
     }}
 while ($selection -ne 0 )
