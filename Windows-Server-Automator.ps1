@@ -5,8 +5,8 @@ $modules = "WinSerAuto-HostConfigurator","WinSerAuto-RoleConfigurator","WinSerAu
 $reg_install = "HKLM:\Software\WinSerAuto"
 
 if((Get-ScheduledTask -TaskName "Windows-Server-Automator")){
-Get-ScheduledTask -TaskName "Windows-Server-Automator" | Stop-ScheduledTask | out-null
-Get-ScheduledTask -TaskName "Windows-Server-Automator" | Disable-ScheduledTask | out-null
+Get-ScheduledTask -TaskName "Windows-Server-Automator" -ErrorAction SilentlyContinue | Stop-ScheduledTask | out-null
+Get-ScheduledTask -TaskName "Windows-Server-Automator" -ErrorAction SilentlyContinue | Disable-ScheduledTask | out-null
 }
     Start-Job -Name "Preparing in background" -ScriptBlock {
         $path_install = "C:\Program Files\WindowsPowerShell\Modules\Windows-Server-Automator"
