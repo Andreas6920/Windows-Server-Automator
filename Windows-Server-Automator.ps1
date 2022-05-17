@@ -44,10 +44,10 @@ Creator: Andreas6920 | https://github.com/Andreas6920/
 "                                                                   
 
 # Change menu color if module already executed
-if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto-HostConfigurator").WinSerAuto_HostConfigurator -eq 0){$menu1 = "Green"} else {$menu1 = "DarkGray"}
-if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto-RoleConfigurator").WinSerAuto_RoleConfigurator -eq 0){$menu2 = "Green"} else {$menu2 = "DarkGray"}
-if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto-ADConfigurator").WinSerAuto_ADConfigurator -eq 0){$menu3 = "Green"} else {$menu3 = "DarkGray"}
-if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto-ShareConfigurator").WinSerAuto_ShareConfigurator -eq 0){$menu4 = "Green"} else {$menu4 = "DarkGray"}
+if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto-HostConfigurator").WinSerAuto-HostConfigurator -eq 0){$menu1 = "Green"} else {$menu1 = "DarkGray"}
+if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto-RoleConfigurator").WinSerAuto-RoleConfigurator -eq 0){$menu2 = "Green"} else {$menu2 = "DarkGray"}
+if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto-ADConfigurator").WinSerAuto-ADConfigurator -eq 0){$menu3 = "Green"} else {$menu3 = "DarkGray"}
+if ((Get-ItemProperty -Path $reg_install -Name "WinSerAuto-ShareConfigurator").WinSerAuto-ShareConfigurator -eq 0){$menu4 = "Green"} else {$menu4 = "DarkGray"}
 
 # Option list
 Clear-Host
