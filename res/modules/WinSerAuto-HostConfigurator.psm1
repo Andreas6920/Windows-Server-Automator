@@ -137,10 +137,11 @@
 
 # Part 4 - Post script
     
+    # Mark module as done
     Set-ItemProperty -Path "HKLM:\Software\WinSerAuto\" -Name "WinSerAuto-HostConfigurator"  -Type DWord -Value 1 | Out-Null
     
 
-
+    # If reboot - add script to logon
     if ($reboot -eq $true){    
 
         #script = "-Windowstyle Maximized -Command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/Windows-Server-Automator.ps1'))"
@@ -149,16 +150,18 @@
         #$trigger = New-ScheduledTaskTrigger -AtLogOn 
         #Register-ScheduledTask -TaskName "Windows-Server-Automator" -Principal $principal -Action $action -Trigger $trigger -Force | Out-Null 
         
-        $taskAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-w Maximized -ep Bypass -File "C:\Program Files\WindowsPowerShell\Modules\Windows-Server-Automator\Windows-Server-Automator.ps1"'
-        $taskTrigger = New-ScheduledTaskTrigger -AtLogOn
         $taskName = "Windows-Server-Automator"
-
-    Register-ScheduledTask -TaskName $taskName -Action $taskAction -Trigger $taskTrigger
-
+        $description = "Server deployment script"
+        $taskAction = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-w Maximized -command iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/Andreas6920/Windows-Server-Automator/main/Windows-Server-Automator.ps1'))"
+        $taskTrigger = New-ScheduledTaskTrigger -Atlogon
+        
+        Register-ScheduledTask -TaskName $taskName -Description $description -Action $taskAction -Trigger $taskTrigger
+        
 
         Write-Host "`t`tComputer is renamed, rebooting in 5 seconds.." -f yellow; Start-Sleep -s 5;
         Restart-Computer -Force }
 
+    # If not reboot - execute main script
     if ($reboot -eq $false){
 
         Write-Host "`t`tModule Complete. Going back to main menu." -f yellow; Start-Sleep -S 2
