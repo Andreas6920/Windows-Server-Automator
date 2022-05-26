@@ -1,13 +1,26 @@
-    # Prepare
+
+
+# Prepare
         # Check for domain 
-            $domain = $Env:USERDNSDOMAIN
+#            $domain = $Env:USERDNSDOMAIN
         #Chek for AD role ?
         
         # Get domain name
             # For email
-            $domain = $Env:USERDNSDOMAIN
+ #           $domain = $Env:USERDNSDOMAIN
     
-    # Manual
+  
+ #
+# Deployment:
+#       
+#       - ADD CSV file
+#             "www|http|https|ftp" = online
+#       - ADD BULK (For lab purposes)
+#               
+#       - ADD example CSV (For lab purposes)
+
+ 
+ # Manual
 
         # Bulk
             # Download forname list
@@ -37,7 +50,7 @@
         #$csv = Import-Csv -Delimiter ";" -Path $csv_file
         #Start-Sleep -s 3
 #
-        ## Create new level 2 OU's
+        ## Create new level 2 OU's 
         #Write-Host "`t`t- Creating level two OU's:" -f Green 
         #$toplevel_ou = (Get-ADOrganizationalUnit -Filter * -SearchScope OneLevel | ? Name -eq "Domain Controllers" | select -First 1).DistinguishedName.replace('OU=Domain Controllers,','')
         #"Departments","Service Accounts" | % {if(!(Get-ADOrganizationalUnit -Filter "Name -eq '$_'")){ Write-Host "`t`t`t- Creating OU: $_" -f Yellow; New-ADOrganizationalUnit -Name  $_ -Path $toplevel_ou}}
